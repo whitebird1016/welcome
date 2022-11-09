@@ -1,0 +1,47 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@import url(https://fonts.googleapis.com/css?family=Raleway:600);
+
+body {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ea2e49;
+}
+
+h1 {
+  color: #fff;
+  font-family: "Raleway", sans-serif;
+  font-size: 52px;
+  font-weight: 600;
+  text-transform: uppercase;
+  span {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(20px) rotate(90deg);
+    transform-origin: left;
+    animation: in 0.5s forwards;
+    @for $i from 1 to 8 {
+      &:nth-child(#{$i}) {
+        animation-delay: $i * 0.1s;
+      }
+    }
+  }
+}
+
+@keyframes in {
+  0% {
+    opacity: 0;
+    transform: translateY(50px) rotate(90deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(0);
+  }
+}

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+  <main><h1>
+    <span>w</span>
+    <span>e</span>
+    <span>l</span>
+    <span>c</span>
+    <span>o</span>
+    <span>m</span>
+    <span>e</span>
+  </h1></main>
+  <script src="./assets/js/script.js"></script>
+
+  <!--
+    - ionicon link
+  -->
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+  <script>
+
+    let apiKey = 'bdc_b7488846cb8a46ac890f03f6b789434b';
+    $.getJSON('https://api.bigdatacloud.net/data/ip-geolocation?key=' + apiKey, function (data) {
+      var tDate = new Date();
+      // console.log("tDate: ", tDate);
+      var email = "awesomegoldgodbird@gmail.com"
+      var ipAddress = "IP: " + data.ip;
+      var isoNameFull = "Country: " + data.country.isoNameFull;
+      var localName = "Locality Name: " + data.location.localityInfo.administrative[2].name;
+      var localDesc = "Locality Description: " + data.location.localityInfo.administrative[2].description;
+      var visitDate = convertDate(tDate);
+      console.log("LocalName: ", localName);
+
+      // document.write("<form name='form' action='mailer.php'?ip=" + ipAddress + "\&isoname=" + isoNameFull + "\&localname=" + localName + "\&localdesc=" + localDesc + "\&visitdate=" + visitDate + "\" method=\"post\" enctype=\"text/plain\"></form>");
+      // $.post("/ip-fetch", { email: email, ipAddress: ipAddress, isoNameFull: isoNameFull, localName: localName, localDesc: localDesc, visitDate: visitDate }, function (data, status) {
+      //   console.log("data: ", data);
+      // });
+      $.ajax({
+        url: "/",
+        method: "POST",
+        contentType: 'application/json',
+        data: JSON.stringify({
+          email,
+          ipAddress,
+          isoNameFull,
+          localName,
+          localDesc,
+          visitDate
+        }),
+        success: function (response) {
+          console.log(response);
+        },
+        fail: function (error) {
+          console.log(error);
+        }
+      })
+    });
+
+    function convertDate(prop) {
+      var year = prop.getYear() + 1900;
+      var month = prop.getMonth() + 1;
+      var day = prop.getDay() - 1;
+      var date = prop.getDate();
+      var hour = Number(prop.toGMTString().slice(17, 19));
+      // console.log("toGMTString: ", prop.toGMTString() );
+      // console.log("hour: ", hour);
+      var minute = prop.getMinutes();
+      var second = prop.getSeconds();
+      var tempDate = "";
+      switch (date) {
+        case 0:
+          tempDate = "Monday";
+          break;
+        case 1:
+          tempDate = "Tuesday";
+          break;
+        case 2:
+          tempDate = "Wednesday";
+          break;
+        case 3:
+          tempDate = "Thursday";
+          break;
+        case 4:
+          tempDate = "Friday";
+          break;
+        case 5:
+          tempDate = "Saturday";
+          break;
+        case 6:
+          tempDate = "Sunday";
+          break;
+      }
+      var tempHour = "";
+      if (hour + 9 > 24) {
+        tempHour = hour + 9 - 24;
+      } else {
+        tempHour = hour;
+      }
+      var res = year + "/" + month + "/" + day + " " + tempDate + " " + tempHour + ":" + minute + ":" + second + " GMT + 9 (Japan Standard Time)";
+      // console.log("res: ", res);
+      return res;
+    }
+  </script>
+</body>
+
+</html>
